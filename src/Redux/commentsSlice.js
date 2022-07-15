@@ -12,6 +12,8 @@ export const fetchComments = createAsyncThunk(
 const initialState = {
   items: [],
   status: "loading",
+  page: 0,
+  sortItems: [],
 };
 
 const commentsSlice = createSlice({
@@ -30,7 +32,7 @@ const commentsSlice = createSlice({
       state.status = "loading";
     });
     builder.addCase(fetchComments.fulfilled, (state, action) => {
-      state.items = action.payload;
+      state.items = action.payload.reverse();
       state.status = "loaded";
     });
     builder.addCase(fetchComments.rejected, (state) => {

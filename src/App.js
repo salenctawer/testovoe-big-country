@@ -1,13 +1,15 @@
 import Container from "@mui/material/Container";
+import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
-import AddCommments from "./Components/AddComments/AddComments";
 import Comments from "./Components/Comments/Comments";
 
 function App() {
   return (
     <Container maxWidth="lg">
-      <AddCommments />
-      <Comments />
+      <Routes>
+        <Route path="/comments/:page" element={<Comments />} />
+        <Route path="*" element={<Navigate to="/comments:page" replace />} />
+      </Routes>
     </Container>
   );
 }

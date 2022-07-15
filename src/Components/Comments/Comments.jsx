@@ -4,15 +4,39 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchComments } from "../../Redux/commentsSlice";
 import Skeleton from "../Skeleton/Skeleton";
 import s from "./Comment.module.scss";
+import AddComments from "./AddComments/AddComments";
+import { useNavigate } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 const Comments = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [commentsPerPage, setCommentsPerPage] = useState(20);
+  let page = window.location.pathname.split("/")[2];
 
   const comments = useSelector((state) => state.comments.items);
   const loading = useSelector((state) => state.comments.status);
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const totalCommentsCount = comments.length;
+  const [currentPage, setCurrentPage] = useState(page);
+  const [pageSize] = useState("20");
+
+  let end = pageSize * currentPage;
+  let begin = end - pageSize;
+
+  let sortComments = comments.slice(begin, end);
+
+  let pagesCount = Math.ceil(totalCommentsCount / pageSize);
+  let pages = [];
+  for (let i = 1; i <= pagesCount; i++) {
+    pages.push(i);
+  }
+
+  const onPageClick = (p) => {
+    setCurrentPage(p);
+    navigate(`/comments/${p}`);
+  };
 
   useEffect(() => {
     dispatch(fetchComments());
@@ -23,10 +47,19 @@ const Comments = () => {
   }
   return (
     <div className={s.comments}>
+      <AddComments />
+      <ArrowBackIcon />
+      {pages.map((p) => (
+        <span key={p} onClick={() => onPageClick(p)}>
+          {p}
+        </span>
+      ))}
+      <ArrowForwardIcon />
       Comments
-      {comments.map((item) => (
+      {sortComments.map((item) => (
         <div className={s.card} key={item.id}>
           <div>
+            <span>{item.id}</span>
             <div>
               <Avatar src={item.author.avatar} />
             </div>

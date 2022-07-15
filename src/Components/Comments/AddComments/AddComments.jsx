@@ -2,7 +2,7 @@ import { Box, Button, Modal, TextField } from "@mui/material";
 import React, { useState } from "react";
 import dateFormat from "dateformat";
 import { useSelector, useDispatch } from "react-redux";
-import { addNewComment } from "../../Redux/commentsSlice";
+import { addNewComment } from "../../../Redux/commentsSlice";
 
 const style = {
   position: "absolute",
