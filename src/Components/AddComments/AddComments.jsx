@@ -4,7 +4,7 @@ import React from "react";
 const AddCommments = () => {
   return (
     <div>
-      <Button>Оставить комментарий</Button>
+      <Button variant="contained">Оставить комментарий</Button>
     </div>
   );
 };
