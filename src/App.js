@@ -8,7 +8,7 @@ function App() {
     <Container maxWidth="lg">
       <Routes>
         <Route path="/comments/:page" element={<Comments />} />
-        <Route path="*" element={<Navigate to="/comments:page" replace />} />
+        <Route path="*" element={<Navigate to="/comments/1" replace />} />
       </Routes>
     </Container>
   );

@@ -1,4 +1,4 @@
-import { Avatar } from "@mui/material";
+import { Avatar, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchComments } from "../../Redux/commentsSlice";
@@ -11,6 +11,9 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 const Comments = () => {
   let page = window.location.pathname.split("/")[2];
+  if (!page) {
+    page = 1;
+  }
 
   const comments = useSelector((state) => state.comments.items);
   const loading = useSelector((state) => state.comments.status);
@@ -48,25 +51,30 @@ const Comments = () => {
   return (
     <div className={s.comments}>
       <AddComments />
-      <ArrowBackIcon />
-      {pages.map((p) => (
-        <span key={p} onClick={() => onPageClick(p)}>
-          {p}
-        </span>
-      ))}
-      <ArrowForwardIcon />
-      Comments
+      <Typography style={{ marginBottom: "15px" }}>Комментарии</Typography>
+      <div className={s.pages}>
+        {pages.map((p) => (
+          <span
+            style={{ cursor: "pointer" }}
+            key={p}
+            onClick={() => onPageClick(p)}
+          >
+            {p}
+          </span>
+        ))}
+      </div>
       {sortComments.map((item) => (
         <div className={s.card} key={item.id}>
-          <div>
-            <span>{item.id}</span>
-            <div>
+          <div style={{ display: "flex" }}>
+            <div style={{ marginRight: "20px" }}>
               <Avatar src={item.author.avatar} />
             </div>
+            <div>
+              {item.author.name} <br />
+              {item.author.company}
+            </div>
           </div>
-          <div>
-            <div></div>
-          </div>
+          <div></div>
           <div>{item.body}</div>
         </div>
       ))}
