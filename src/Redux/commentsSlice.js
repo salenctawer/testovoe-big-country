@@ -17,7 +17,12 @@ const initialState = {
 const commentsSlice = createSlice({
   name: "comments",
   initialState,
-  reducers: {},
+  reducers: {
+    addNewComment: (state, action) => {
+      action.payload.id = state.items.length + 1;
+      state.items.push(action.payload);
+    },
+  },
   extraReducers: (builder) => {
     //Получение комментариев
     builder.addCase(fetchComments.pending, (state) => {
@@ -34,5 +39,7 @@ const commentsSlice = createSlice({
     });
   },
 });
+
+export const { addNewComment } = commentsSlice.actions;
 
 export default commentsSlice.reducer;
