@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import dateFormat from "dateformat";
 import { useSelector, useDispatch } from "react-redux";
 import { addNewComment } from "../../../Redux/commentsSlice";
+import s from "./AddComments.module.scss";
+import { useForm } from "react-hook-form";
 
 const style = {
   position: "absolute",
@@ -13,45 +15,83 @@ const style = {
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
+  paddingBottom: 2,
 };
 
 const AddCommments = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [value, setValue] = useState("");
 
   const dispatch = useDispatch();
   const author = useSelector((state) => state.auth.author);
 
   const nowDate = dateFormat(new Date(), `d mmmm yyyy, 'at' hh:MM`);
 
-  const onSubmit = () => {
+  const onSubmit = (value) => {
     let obj = {
       id: 0,
-      body: value,
+      body: value.body,
       created_at: nowDate,
       author: author,
     };
     dispatch(addNewComment(obj));
+    handleClose();
   };
 
   return (
-    <div>
+    <div className={s.addComments}>
       <Button variant="contained" onClick={handleOpen}>
         Оставить комментарий
       </Button>
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
-          <TextField
-            id="outlined-multiline-static"
-            label="Multiline"
-            multiline
-            rows={4}
-            value={value}
-            onChange={(event) => setValue(event.target.value)}
-          />
-          <Button onClick={onSubmit}>Добавить</Button>
+          <form
+            className={s.form}
+            noValidate
+            onSubmit={handleSubmit((values) => onSubmit(values))}
+          >
+            <TextField
+              {...register("body", {
+                required: {
+                  value: true,
+                  message: "Это поле обязательно",
+                },
+                maxLength: {
+                  value: 1000,
+                  message: "Вы не можете ввести более 1000 символов",
+                },
+                minLength: {
+                  value: 3,
+                  message: "Нужно ввести минимум 3 символа",
+                },
+              })}
+              id="body"
+              required={true}
+              label="Комментарий"
+              multiline
+              rows={6}
+              fullWidth
+              error={Boolean(errors.body?.message)}
+              helperText={errors.body?.message}
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              style={{
+                marginTop: "15px",
+                width: "100px",
+              }}
+            >
+              Добавить
+            </Button>
+          </form>
         </Box>
       </Modal>
     </div>

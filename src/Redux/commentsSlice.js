@@ -22,7 +22,7 @@ const commentsSlice = createSlice({
   reducers: {
     addNewComment: (state, action) => {
       action.payload.id = state.items.length + 1;
-      state.items.push(action.payload);
+      state.items.unshift(action.payload);
     },
   },
   extraReducers: (builder) => {
