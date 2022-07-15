@@ -2,7 +2,7 @@ import { Avatar, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchComments } from "../../Redux/commentsSlice";
-import Skeleton from "../Loading/Loading";
+import Loading from "../Loading/Loading";
 import s from "./Comment.module.scss";
 import AddComments from "./AddComments/AddComments";
 import { useNavigate } from "react-router-dom";
@@ -44,7 +44,7 @@ const Comments = () => {
   }, []);
 
   if (loading !== "loaded") {
-    return <Skeleton />;
+    return <Loading />;
   }
   return (
     <div className={s.comments}>
