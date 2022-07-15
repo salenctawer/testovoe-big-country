@@ -2,12 +2,11 @@ import { Avatar, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchComments } from "../../Redux/commentsSlice";
-import Skeleton from "../Skeleton/Skeleton";
+import Skeleton from "../Loading/Loading";
 import s from "./Comment.module.scss";
 import AddComments from "./AddComments/AddComments";
 import { useNavigate } from "react-router-dom";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import dateFormat from "dateformat";
 
 const Comments = () => {
   let page = window.location.pathname.split("/")[2];
@@ -29,7 +28,6 @@ const Comments = () => {
   let begin = end - pageSize;
 
   let sortComments = comments.slice(begin, end);
-
   let pagesCount = Math.ceil(totalCommentsCount / pageSize);
   let pages = [];
   for (let i = 1; i <= pagesCount; i++) {
@@ -55,9 +53,9 @@ const Comments = () => {
       <div className={s.pages}>
         {pages.map((p) => (
           <span
-            style={{ cursor: "pointer" }}
             key={p}
             onClick={() => onPageClick(p)}
+            className={p == currentPage ? s.activeNumber : s.number}
           >
             {p}
           </span>
@@ -73,9 +71,12 @@ const Comments = () => {
               {item.author.name} <br />
               {item.author.company}
             </div>
+            <div style={{ marginLeft: "auto", marginRight: "0" }}>
+              {dateFormat(item.created_at, `d mmmm yyyy, 'at' hh:MM`)}
+            </div>
           </div>
           <div></div>
-          <div>{item.body}</div>
+          <div style={{ marginTop: "20px" }}>{item.body}</div>
         </div>
       ))}
     </div>

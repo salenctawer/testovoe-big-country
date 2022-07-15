@@ -32,7 +32,7 @@ const AddCommments = () => {
   const dispatch = useDispatch();
   const author = useSelector((state) => state.auth.author);
 
-  const nowDate = dateFormat(new Date(), `d mmmm yyyy, 'at' hh:MM`);
+  const nowDate = dateFormat(new Date(), "isoDateTime");
 
   const onSubmit = (value) => {
     let obj = {
