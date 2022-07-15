@@ -4,7 +4,7 @@ import { commentsApi } from "../Api/Api";
 export const fetchComments = createAsyncThunk(
   "/comments/fetchComments",
   async () => {
-    const { data } = await commentsApi();
+    const { data } = await commentsApi.fetchComments();
     return data;
   }
 );
